@@ -1,0 +1,83 @@
+#navbar{
+    background: #988D78;
+    overflow: hidden;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    height:111px;
+
+    #inside-navbar{
+        height: 90%;
+        background-color: #6C6A5B;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+        color: #DFDED5;
+        width: 100%;
+        
+    
+        #logo-container{
+            a{
+                display: block;
+                text-decoration: none;
+                font: 20px "Lexend Deca";
+                color: #DFDED5;
+                margin-left: 30px;
+            }
+            
+            
+            display: block;
+            float: left;
+            overflow: hidden;
+            width: 18.5%;
+        }
+    
+        #search{
+            
+            
+            display: block;
+            float: left;
+            overflow: hidden;
+            width: 55.5%;
+        }
+    
+        #name-container{
+            
+            
+            display: block;
+            float: left;
+            overflow: hidden;
+            width: 18.5%;
+    
+            #identity-name{
+                float: right;
+                font: 16px "Lexend Deca";
+                margin-right: 30px;
+            }
+        }
+    
+        #exit-container{
+            
+            
+            display: block;
+            float: left;
+            overflow: hidden;
+            width: auto;
+            #exit{
+                border: 2px solid #556B2F;
+                border-radius: 5px;
+                font: normal normal bold 14px/1.5 Tribuchet;
+                color: #FFE5E5;
+                background: #FF4500;                
+                transition: all 50ms;
+                &:hover{
+                    background: #FFA07A
+                }
+            }
+        }
+    
+        
+    }
+    
+}
+

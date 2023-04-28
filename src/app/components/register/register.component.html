@@ -1,0 +1,44 @@
+<div id="register-form">
+    <form #register="ngForm" (ngSubmit)="submitUserRegister()">
+        <label for="name">Nombre</label>
+        <input type="text" name="name" #name="ngModel" [(ngModel)]="userRegister.name" required>
+    
+        <small *ngIf="!name.valid && name.touched" class="invalid-feedback d-block">
+            El nombre no es válido
+        </small>			
+    
+        <label for="email">Email</label>
+        <input type="email" name="email" #email="ngModel" [(ngModel)]="userRegister.email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+    
+        <small *ngIf="!email.valid && email.touched" class="invalid-feedback d-block">
+            El email no es válido
+        </small>			
+    
+        <label for="password">Contraseña</label>
+        <input type="password" name="password" class="form-control" #password="ngModel" [(ngModel)]="userRegister.password" required>
+    
+        <small *ngIf="!password.valid && password.touched" class="invalid-feedback d-block">
+            La contraseña no es válida
+        </small>
+    
+        <label for="password">Repetir contraseña</label>
+        <input type="password" name="passwordRepeat" class="form-control" #passwordRepeat="ngModel" [(ngModel)]="userRegister.passwordRepeat" required>
+    
+        <small *ngIf="userRegister.passwordRepeat != userRegister.password" class="invalid-feedback d-block">
+            
+            La contraseña no es válida
+        </small>
+
+        <label for="adminEmail">Admin email</label>
+        <input type="email" name="adminEmail" #adminEmail="ngModel" [(ngModel)]="userRegister.admin_email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+    
+        <small *ngIf="!adminEmail.valid && adminEmail.touched" class="invalid-feedback d-block">
+            El email no es válido
+        </small>			
+    
+        <input type="submit" value="Identificarse" class="btn btn-success" [disabled]="register.invalid || userRegister.passwordRepeat != userRegister.password">
+    </form>
+    
+    
+</div>
+

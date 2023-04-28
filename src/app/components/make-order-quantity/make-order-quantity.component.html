@@ -1,0 +1,32 @@
+<div mat-dialog-title #dialogTitle>
+    Indicar cantidad
+</div>
+
+<mat-dialog-content>
+    <div>
+        {{sizeItems[currentIndex].modelId}}
+        {{sizeItems[currentIndex].modelTitle}}
+        {{sizeItems[currentIndex].modelFeatures}}
+        {{sizeItems[currentIndex].number}}
+    </div>
+    
+    <div class="quantity-wrapper">
+        <input type="number" [(ngModel)]="sizeItems[currentIndex].quantity" class="quantity-input" 
+            #inputQuantity  (focus)="onInputFocus()"
+
+        />
+    </div>
+    
+    <div class="buttons-quantity">
+        <div class="index-control">
+            <button (click)="subtractIndex()" *ngIf="currentIndex != 0" class="back">Atrás</button>
+            <button (click)="addIndex()" *ngIf="currentIndex != lastIndex" class="forward">Siguiente</button>
+        </div>
+        <div class="finish-button-wrapper">
+            <button (click)="submitArray()" *ngIf="currentIndex == lastIndex" class="finish">Enviar orden</button>
+        </div>
+        
+        
+    </div>
+    
+</mat-dialog-content>

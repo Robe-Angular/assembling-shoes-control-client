@@ -1,0 +1,17 @@
+<mat-dialog-content>
+    <form #newModelForm="ngForm" (ngSubmit)="submitNewModel()">
+        <label for="title">Título</label>
+        <input name="title" #title="ngModel" [(ngModel)]="newModel.title" type="text">
+
+        <label for="features">Características</label>
+        <input name="features" #features="ngModel" [(ngModel)]="newModel.features" type="text">
+
+        <label for="minSize">Talla mínima</label>
+        <input name="minSize" #minSize="ngModel" [(ngModel)]="newModel.minSize" type="text">
+
+        <label for="maxSize">Talla máxima</label>
+        <input name="maxSize" #maxSize="ngModel" [(ngModel)]="newModel.maxSize" type="text">
+
+        <input type="submit" value="Crear" [disabled]="newModelForm.invalid">   
+    </form>
+</mat-dialog-content>

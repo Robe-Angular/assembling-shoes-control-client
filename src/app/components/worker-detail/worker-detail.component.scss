@@ -1,0 +1,160 @@
+#worker-name{
+    display: flex;
+    justify-content: center;
+    color: #ADD8E6;
+    font-size: xxx-large;
+    font-variant: petite-caps;
+    font-family: sans-serif;
+    font-weight: 800;
+}
+
+.list-title-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-top: 2px solid #D3D3D3;
+    padding-top: 14px;
+    color: #FFFFE0;
+    margin-bottom: 4px;
+
+    .list-title{
+        font-size: 27px;
+        font-weight: 100;
+        width: 50%;
+    }
+
+}
+
+#all-orders, #all-size-worker{
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    button{
+        width: 50%;
+        height: 100px;
+        display: block;
+        margin:auto;
+        margin-bottom: 14px;
+        border-radius: 10px;
+        border: 6px solid  #5c486f;
+        background: #486f7f;
+        font: normal normal bold 20px/1.5 Arial, sans-serif;
+        color: #faecec;
+        transition: all 300ms;
+        &:hover{
+            background: #4a5873;
+        }
+    }
+}
+
+
+
+#model-list{
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    justify-content: center;
+    .model-element{
+        width: 100px;
+        height: 100px;
+        button{
+            padding: 5px;
+            border-radius: 7px;
+            background: #3b7d3e;
+            color: #faecec;
+            border: 1px solid #5c486f;
+            font-weight: 600;
+            min-height: 70px;
+            transition: all 300ms;
+            &:hover{
+                background: #4a5873;
+            }
+        }
+        .selected{
+            background-color:#A1C68B;
+            color: #f7f7f7;
+        }
+    }
+}
+
+.list-wrapper{
+    width: 100%;
+    text-align: center;
+    #order-list,#size-worker-list{
+        width: 48%;
+        
+        display: inline-block;
+        border-radius: 28px;
+        border: 3px solid #7b1fa259;
+        overflow: hidden;
+    }
+}
+
+.is-add,.is-subtract,.exist{
+    padding: 5px;
+    .model-title{
+        font-family: 'Comic Sans MS',fantasy;
+        font-weight: 800;
+        font-size: 22px;
+    }
+    .model-features{
+        font-family: inherit;
+        font-weight: 100;
+
+    }
+}
+.is-add{
+    background-color:#a5d6a7;
+    color: #263d0b;
+    border-bottom: 5px solid #7b1fa2;
+    .order-date{
+        border-bottom: 2px solid #ffffff59;
+    }
+
+}
+
+.exist{
+    background-color:#c8d3c9;
+    color: #58812a;
+    border-bottom: 5px solid #7b1fa270;
+    .model-features{
+        border-bottom: 2px solid #ffffff2d;
+    }
+
+}
+
+
+.is-subtract{
+    background-color: #ff7043;
+    color: beige;
+    border-bottom: 5px solid #ab47bc;
+    .order-date{
+        border-bottom: 2px solid #03030314;
+    }
+}
+
+.size-order-element{
+    display: block;
+    float: left;
+    width: 26px;
+    overflow: hidden;
+}
+
+.model-title,.model-features,.order-date{
+    display: block;
+    text-align: start;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.order-date{
+    font-variant: all-small-caps;
+    font-family: monospace;
+    font-weight: 800;
+}
+
+.creator{
+    text-align: end;
+    font-size: 9px;
+    margin-right: 15px;
+}

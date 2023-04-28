@@ -1,0 +1,26 @@
+<div mat-dialog-title>
+    Selecciona las tallas
+</div>
+<mat-dialog-content>
+    {{data.modelsSelected[currentIndex].title}} {{data.modelsSelected[currentIndex].features}}
+    <div class="sizes-wrapper">
+        <div *ngFor="let size of currentSizes">
+            <button (click)="selectSize(size.id,size.number)" *ngIf="!checkIsSize(size.id)" class="size">
+                {{size.number}}
+            </button>
+    
+            <button (click)="deselectSize(size.id)" *ngIf="checkIsSize(size.id)" class="size selected">
+                {{size.number}}
+            </button>
+            
+        </div>
+    </div>
+    
+    <div class="size-buttons">
+        <button (click)="subtractIndex()" *ngIf="currentIndex != 0" class="back">Atrás</button>
+        <button (click)="addIndex()" *ngIf="currentIndex != lastIndex" class="forward">Siguiente</button>
+        <button (click)="openQuantityDialog()" *ngIf="currentIndex == lastIndex" class="finish">Terminar</button>
+    </div>
+
+    
+</mat-dialog-content>

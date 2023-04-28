@@ -1,0 +1,17 @@
+<p>admin-panel works!</p>
+<div>
+    <p *ngIf="admin.allow_register" class="allowed"> Allowed </p>
+    <p *ngIf="!admin.allow_register" class="not-allowed">Not allowed</p>
+</div>
+
+
+<button (click)="allowRegister(true)"> Allow registration </button>
+<button (click)="allowRegister(false)"> Disallow registration </button>
+
+<div id="not-verified-list">
+    <div *ngFor="let user of usersNotVerified">
+        {{user.email}}
+        <button (click)="accept(user.id)"> Aceptar </button>
+        <button (click)="deny(user.id)"> Denegar </button>
+    </div>
+</div>

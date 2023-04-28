@@ -1,0 +1,32 @@
+#user-panel{
+    margin-top:14px;
+    display: block;
+    text-align: center;
+    #user-panel-wrapper{
+        display: inline-block;
+        width: 84%;
+        text-align: justify;
+        .user-panel-section-wrapper{
+    
+            height: 100px;
+            width: 33.33%;
+            display: inline-block;
+            
+        
+            .user-panel-section{
+                display: block;
+                overflow: hidden;
+                height: 100%;
+                width: 100%;
+                button {
+                    height: 100%;
+                    width: 100%;
+                    background: ivory;
+                    border: 1px solid #659265;
+                    border-radius: 21px;
+                    color: #800020;
+                }
+            }
+        }
+    }
+}

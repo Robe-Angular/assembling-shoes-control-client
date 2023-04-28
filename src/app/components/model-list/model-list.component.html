@@ -1,0 +1,11 @@
+<mat-dialog-content *ngIf="modelList.length > 0" class="model-list-dialog">
+
+    <div class="model-wrapper" *ngFor="let model of modelList">
+        <a class="model-info" [routerLink]="['/']">
+            {{model.title}} {{model.creator.name}} - {{model.features}}
+        </a>
+        
+    </div>
+</mat-dialog-content>
+
+

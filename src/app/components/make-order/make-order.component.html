@@ -1,0 +1,46 @@
+<div mat-dialog-title>
+    {{title}}
+</div>
+<mat-dialog-content>
+    <div *ngIf="data.workerId == 0; else workerSelected">
+        <div *ngIf="workerList.length > 0" class="worker-list-dialog">
+            <div class="worker-wrapper" *ngFor="let worker of workerList">
+                <button (click)="selectWorker(worker.id, worker.name)" class="worker-info">
+                    {{worker.name}} {{worker.creator.name}}
+                </button>
+                
+            </div>
+        </div>
+    </div>
+    <ng-template #workerSelected>
+        {{workerName}}
+        
+        <div *ngIf="modelList.length > 0" class="model-list-dialog">
+
+            <div class="model-wrapper" *ngFor="let model of modelList" >
+                <button (click)="selectModel(model)" class="model-info" 
+                    [disabled]="checkOnModelsSelected(model.id)"
+                    *ngIf="!checkOnModelsSelected(model.id)"
+                >
+                    {{model.title}} - {{model.features}}
+
+                    
+                </button>
+                <button (click)="deselectModel(model.id)" class="model-info selected-model" 
+                    [disabled]="!checkOnModelsSelected(model.id)" *ngIf="checkOnModelsSelected(model.id)"
+                    
+                >   
+                {{model.title}} - {{model.features}}
+                        
+                </button>
+                
+            </div>
+        </div>
+        <div class="select-models-control">
+            <button (click)="openMakeOrderSizes()" class="forward">Siguiente</button>
+        </div>
+        
+        
+        
+    </ng-template>
+</mat-dialog-content>

@@ -1,0 +1,17 @@
+#login-form{
+    width: 90%;
+    form{
+        margin-top: 37px;
+        margin-left: 25px;
+        label,input,small{
+            display: block;
+            width: 60%;
+        }
+        input[type=submit]{
+            padding: 0px;
+            width: 91px;
+            margin-top: 9px;
+            height: 41px;
+        }
+    }
+}

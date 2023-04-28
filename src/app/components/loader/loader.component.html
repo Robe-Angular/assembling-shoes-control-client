@@ -1,0 +1,21 @@
+<!-- loader.component.html -->
+<div *ngIf="(isLoading); else noLoader" class="overlay">
+
+  <mat-progress-spinner class="spinner"
+                        mode="indeterminate">
+
+  </mat-progress-spinner>
+</div>
+<!--
+<div class="overlay">
+  <mat-progress-spinner class="spinner"
+  mode="indeterminate">
+
+  </mat-progress-spinner>
+</div>
+
+-->
+
+<ng-template #noLoader>
+  <ng-content></ng-content>
+</ng-template>

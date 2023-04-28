@@ -1,0 +1,31 @@
+<div mat-dialog-title>
+   Selecciona modelo
+</div>
+<mat-dialog-content>
+    <div>
+        {{workerName}}
+    </div>
+    <div *ngFor="let modelBoot of modelsBoot" class="model-wrapper">
+        <button (click)="selectModel(modelBoot)" class="model-info" 
+                    [disabled]="checkOnModelsSelected(modelBoot.id)"
+                    *ngIf="!checkOnModelsSelected(modelBoot.id)"
+        >
+            {{modelBoot.title}} - {{modelBoot.features}}
+
+            
+        </button>
+        <button (click)="deselectModel(modelBoot.id)" class="model-info selected-model" 
+            [disabled]="!checkOnModelsSelected(modelBoot.id)" *ngIf="checkOnModelsSelected(modelBoot.id)"
+            
+        >   
+        {{modelBoot.title}} - {{modelBoot.features}}
+                
+        </button>
+        
+    </div>
+    <div class="select-models-control">
+        <button (click)="openCompleteOrderSizesDialog()" class="forward">Siguiente</button>
+    </div>
+    
+
+</mat-dialog-content>

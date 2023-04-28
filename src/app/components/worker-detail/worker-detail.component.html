@@ -1,0 +1,138 @@
+<div id="worker-name">
+    {{workerName}}
+</div>
+
+<div class="list-container">
+
+    <div class="list-title-wrapper" >
+        <div class="list-title">
+            Órdenes
+        </div>
+        
+    </div>
+    
+    <div id="all-orders">
+        <button (click)="getAllOrders()">
+            Todas las órdenes
+        </button>
+    </div>
+    <div id="model-list">
+        
+        <div *ngFor="let modelWorker of modelsWithOrders" class="model-element">
+            <button (click)="concatOrders(modelWorker.id)" *ngIf="!checkModelWorker(modelWorker.id)">
+                {{modelWorker.model_boot.title}} - {{modelWorker.model_boot.features}}
+            </button>
+            
+            <button (click)="filterOrders(modelWorker.id)" *ngIf="checkModelWorker(modelWorker.id)" class="selected">
+                {{modelWorker.model_boot.title}} - {{modelWorker.model_boot.features}}
+            </button>
+        </div>
+    </div>
+    <div class="list-wrapper">
+        <div id="order-list" *ngIf="orders.length > 0">
+        
+            <div *ngFor="let order of orders" [class.is-add]="!order.add_or_subtract" [class.is-subtract]="order.add_or_subtract">
+                <div class="model-title">
+                    {{order.model_boot_worker.model_boot.title}}
+                </div>
+                <div class="model-features">
+                    {{order.model_boot_worker.model_boot.features}}
+                </div>
+                <div class="order-date">
+                    {{order.created_at | date:"dd/MM/yyyy"}}
+                </div>
+                <div>
+                    <div *ngFor="let sizeOrder of order.size_order" class="size-order-element">
+                        
+                        <div class="size-number">
+                            {{sizeOrder.size.number}}
+                        </div>
+                        <div class="size-quantity">
+                            {{sizeOrder.quantity}}
+                        </div>
+                    
+                        
+                    </div>
+                    <div class="clear-fix"></div>
+                </div>
+    
+                <div class="total">
+                    Total: {{getTotalInOrder(order.id)}}
+                </div>
+
+                <div class="creator">
+                    {{order.creator.name}}
+                </div>
+                
+                
+            </div>
+    
+        </div>
+    </div>    
+    
+</div>
+
+<div class="list-container">    
+    <div class="list-title-wrapper">
+        <div class="list-title" >
+            En existencia
+        </div>        
+    </div>
+    
+    <div id="all-size-worker">
+        <button (click)="getAllSizeWorker()">
+            Todos los modelos
+        </button>
+    </div>
+    
+    <div id="model-list">
+        
+        <div *ngFor="let modelBoot of modelsWithSizeWorker" class="model-element">
+            <button (click)="concatSizeWorker(modelBoot.id)" *ngIf="!checkModelOnSizeWorker(modelBoot.id)">
+                {{modelBoot.title}} - {{modelBoot.features}}
+            </button>
+            
+            <button (click)="filterSizeWorker(modelBoot.id)" *ngIf="checkModelOnSizeWorker(modelBoot.id)" class="selected">
+                {{modelBoot.title}} - {{modelBoot.features}}
+            </button>
+        </div>
+    </div>
+    <div class="list-wrapper">
+        <div id="size-worker-list" *ngIf="modelsSelectedForSizeWorker.length > 0">
+        
+            <div *ngFor="let modelBoot of modelsSelectedForSizeWorker" class="exist">
+                <div class="model-title">
+                    {{modelBoot.title}}
+                </div>
+                <div class="model-features">
+                    {{modelBoot.features}}
+                </div>
+                <div>
+                    <div *ngFor="let size of modelBoot.sizes" class="size-order-element">
+                        
+                        <div class="size-number">
+                            {{size.number}}
+                        </div>
+                        <div class="size-quantity">
+                            {{size.size_worker[0].quantity}}
+                        </div>
+                    
+                        
+                    </div>
+                    <div class="clear-fix"></div>
+                </div>
+    
+                <div>
+                    Total: {{getTotalInSizeWorker(modelBoot.id)}}
+                </div>
+                
+                
+            </div>
+    
+        </div>
+    </div>
+    
+    
+
+</div>
+
