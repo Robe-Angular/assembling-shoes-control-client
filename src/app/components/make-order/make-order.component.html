@@ -6,7 +6,7 @@
         <div *ngIf="workerList.length > 0" class="worker-list-dialog">
             <div class="worker-wrapper" *ngFor="let worker of workerList">
                 <button (click)="selectWorker(worker.id, worker.name)" class="worker-info">
-                    {{worker.name}} {{worker.creator.name}}
+                    {{worker.name}} <small>{{worker.creator.name}}</small>
                 </button>
                 
             </div>
