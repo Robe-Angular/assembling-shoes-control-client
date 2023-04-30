@@ -1,7 +1,7 @@
 <mat-dialog-content *ngIf="workerList.length > 0" class="worker-list-dialog">
     <div class="worker-wrapper" *ngFor="let worker of workerList">
         <a class="worker-info" [routerLink]="['/worker-detail/',worker.id]">
-            {{worker.name}} {{worker.creator.name}}
+            {{worker.name}} <small>{{worker.creator.name}}</small>
         </a>
         
     </div>
