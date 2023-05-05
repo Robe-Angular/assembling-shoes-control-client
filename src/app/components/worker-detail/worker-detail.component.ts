@@ -130,6 +130,7 @@ export class WorkerDetailComponent implements OnInit {
     this._modelService.sizeWorkerByWorker(this.workerId).subscribe(
       response => {
         this.modelsSelectedForSizeWorker = response.models_with_size_worker;
+        this.sortAllSizeWorkerSizes();
         
       },error => {
         console.log(error);
@@ -140,12 +141,26 @@ export class WorkerDetailComponent implements OnInit {
   concatSizeWorker(modelBootId:number){
     this._modelService.sizeWorkerByWorkerModel(this.workerId,modelBootId).subscribe(
       response => {
-        this.modelsSelectedForSizeWorker.push(response.model_with_size_worker);
+        let modelWithSizeWorker = response.model_with_size_worker.sizes.sort((a:any,b:any) => {
+          return a.number - b.number;
+        });
+        this.modelsSelectedForSizeWorker.push(modelWithSizeWorker);
+        
       },error => {
         console.log(error);
       }
     )
   }
+
+  sortAllSizeWorkerSizes(){
+    this.modelsSelectedForSizeWorker.forEach( (modelBootElement => {
+      modelBootElement.sizes.sort((a:any,b:any) => {
+        return a.number - b.number;
+      });
+    }));
+  }
+
+  
 
   filterSizeWorker(modelBootId:number){
     this.modelsSelectedForSizeWorker = this.modelsSelectedForSizeWorker.filter(modelSelected => modelSelected.id !== modelBootId);
