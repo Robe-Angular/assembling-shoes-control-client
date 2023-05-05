@@ -141,7 +141,8 @@ export class WorkerDetailComponent implements OnInit {
   concatSizeWorker(modelBootId:number){
     this._modelService.sizeWorkerByWorkerModel(this.workerId,modelBootId).subscribe(
       response => {
-        let modelWithSizeWorker = response.model_with_size_worker.sizes.sort((a:any,b:any) => {
+        let modelWithSizeWorker = response.model_with_size_worker;
+        modelWithSizeWorker.sizes.sort((a:any,b:any) => {
           return a.number - b.number;
         });
         this.modelsSelectedForSizeWorker.push(modelWithSizeWorker);
