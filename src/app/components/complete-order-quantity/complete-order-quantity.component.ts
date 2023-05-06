@@ -32,7 +32,7 @@ export class CompleteOrderQuantityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.scrollToDialogTitle();
+    //this.scrollToDialogTitle();
   }
 
   ngDoCheck(){
