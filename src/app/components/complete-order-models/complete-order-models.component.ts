@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ModelService } from 'src/app/services/model.service';
 import { CompleteOrderSizesComponent } from '../complete-order-sizes/complete-order-sizes.component';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-complete-order-models',
@@ -14,23 +15,26 @@ export class CompleteOrderModelsComponent implements OnInit {
   public modelsBoot:Array<any>;
   public workerName:string;
   public modelsSelected:Array<any>;
+  public token: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data:any,
     private _dialog:MatDialog,
     private _dialogRef: MatDialogRef<CompleteOrderModelsComponent>,
-    private _modelService: ModelService
+    private _modelService: ModelService,
+    private _userService: UserService
     
   ) { 
     this.workerId = this.data.dialogInfo.workerId;
     this.workerName = this.data.workerName;
     this.modelsBoot = [];
     this.modelsSelected = [];
+    this.token = _userService.getJwtToken()
   }
 
   ngOnInit(): void {
     
-    this._modelService.modelWorkerSatisfy(this.workerId).subscribe(
+    this._modelService.modelWorkerSatisfy(this.workerId, this.token).subscribe(
       response => {
         this.modelsBoot = response.models_satisfy;
       },error => {

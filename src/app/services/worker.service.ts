@@ -9,16 +9,16 @@ import { Observable } from 'rxjs';
 })
 export class WorkerService {
   
-  private webUrl:string;
+  private apiUrl:string;
 
   constructor(
     private _http:HttpClient,
     private _userService: UserService
   ) { 
-    this.webUrl = GLOBAL.webUrl;
+    this.apiUrl = GLOBAL.apiUrl;
   }
 
-  createWorker(name:string):Observable<any>{
+  createWorker(name:string, token:string):Observable<any>{
     let json = JSON.stringify({
       name: name
     });
@@ -28,32 +28,32 @@ export class WorkerService {
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.post(this.webUrl+'/new-worker', params, {headers: headers,withCredentials:true});
+		return this._http.post(this.apiUrl+'/new-worker', params, {headers: headers});
   }
 
-  workerList():Observable<any>{
+  workerList(token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/worker-list', {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/worker-list', {headers: headers});
   }
 
-  getWorkerInfo(workerId:number):Observable<any>{
+  getWorkerInfo(workerId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/get-worker/' + workerId, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/get-worker/' + workerId, {headers: headers});
   }
 
 }

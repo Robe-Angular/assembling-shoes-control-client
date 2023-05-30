@@ -12,34 +12,36 @@ import { Router } from '@angular/router';
 })
 export class AdminService {
 
-  public webUrl:string;
+  //public apiUrl:string;
+  public apiUrl:string;
 
   constructor(
     private _http:HttpClient,
     private _userService:UserService,
     private _router:Router
   ) { 
-    this.webUrl = GLOBAL.webUrl;
+    this.apiUrl = GLOBAL.apiUrl;
   }
 
-  getAdmin():Observable<any>{
+  getAdmin(token:string):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
       .set(
-        'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+        'Authorization', ' Bearer ' + token
         
     );
-		return this._http.get(this.webUrl+'/admin',  {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/admin',  {headers: headers});
   }
 
-  verify():Observable<boolean>{
+  verify(token:string):Observable<boolean>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     .set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
 
     );
-		return this._http.get(this.webUrl+'/admin',  {headers: headers,withCredentials:true}).pipe(
+		return this._http.get(this.apiUrl+'/admin',  {headers: headers}).pipe(
       map( manager=> {
         const hasCredentials = !!manager.hasOwnProperty('manager');
+        
         console.log(manager);
         return hasCredentials;
       } ),
@@ -49,44 +51,44 @@ export class AdminService {
     );
   }
 
-  allow_register(allowRegister:boolean):Observable<any>{
+  allow_register(allowRegister:boolean,token:string):Observable<any>{
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
       .set(
-        'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+        'Authorization', ' Bearer ' + token
         
     );
 
-		return this._http.get(this.webUrl+'/admin/allow_register'+'/'+ allowRegister, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/admin/allow_register'+'/'+ allowRegister, {headers: headers});
   }
 
-  getUsersNotVerified():Observable<any>{
+  getUsersNotVerified(token:string):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
       .set(
-        'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+        'Authorization', ' Bearer ' + token
         
     );
 
-		return this._http.get(this.webUrl+'/admin/users-not-verified', {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/admin/users-not-verified', {headers: headers});
   }
 
-  accept(userId:number):Observable<any>{
+  accept(userId:number,token:string):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
       .set(
-        'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+        'Authorization', ' Bearer ' + token
         
     );
 
-		return this._http.get(this.webUrl+'/admin/accept-email/' + userId, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/admin/accept-email/' + userId, {headers: headers});
   }
 
-  deny(userId:number):Observable<any>{
+  deny(userId:number, token:string):Observable<any>{ 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
       .set(
-        'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+        'Authorization', ' Bearer ' + token
         
     );
 
-		return this._http.get(this.webUrl+'/admin/deny-email/' + userId, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/admin/deny-email/' + userId, {headers: headers});
   }
 }

@@ -10,16 +10,16 @@ import { Model } from '../interfaces/model';
 })
 export class ModelService {
 
-  private webUrl:string;
+  private apiUrl:string;
 
   constructor(
     private _http: HttpClient,
     private _userService: UserService
   ) { 
-    this.webUrl = GLOBAL.webUrl;
+    this.apiUrl = GLOBAL.apiUrl;
   }
 
-  createModel(model:Model):Observable<any>{
+  createModel(model:Model, token:string):Observable<any>{
     let json = JSON.stringify(model);
 		let params = 'json='+json;
 
@@ -27,46 +27,46 @@ export class ModelService {
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.post(this.webUrl+'/make-model', params, {headers: headers,withCredentials:true});
+		return this._http.post(this.apiUrl+'/make-model', params, {headers: headers});
   }
 
-  modelList():Observable<any>{
+  modelList(token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/model-list', {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/model-list', {headers: headers});
   }
 
-  getModelInfo(modelId:number):Observable<any>{
+  getModelInfo(modelId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/get-model/' + modelId, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/get-model/' + modelId, {headers: headers});
   }
 
-  getSizes(modelId:number):Observable<any>{
+  getSizes(modelId:number, token: string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/get-sizes-by-model-boot/' + modelId, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/get-sizes-by-model-boot/' + modelId, {headers: headers});
   }
 
-  makeOrder(sizesSelected:Array<any>,workerId:number):Observable<any>{
+  makeOrder(sizesSelected:Array<any>,workerId:number, token:string):Observable<any>{
     let json = JSON.stringify(sizesSelected);
 		let params = 'json='+json;
 
@@ -74,35 +74,35 @@ export class ModelService {
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.post(this.webUrl+'/make-order/' + workerId,params, {headers: headers,withCredentials:true});
+		return this._http.post(this.apiUrl+'/make-order/' + workerId,params, {headers: headers});
   }
 
-  modelWorkerSatisfy(workerId:number):Observable<any>{
+  modelWorkerSatisfy(workerId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/model-worker-satisfy/' + workerId, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/model-worker-satisfy/' + workerId, {headers: headers});
   }
 
-  sizeWorkerSatisfy(modelId:number, workerId:number):Observable<any>{
+  sizeWorkerSatisfy(modelId:number, workerId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/size-worker-satisfy/' + workerId + '/' + modelId, {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/size-worker-satisfy/' + workerId + '/' + modelId, {headers: headers});
   }
 
-  completeOrder(sizesSelected:Array<any>):Observable<any>{
+  completeOrder(sizesSelected:Array<any>, token: string):Observable<any>{
     let json = JSON.stringify(sizesSelected);
 		let params = 'json='+json;
 
@@ -110,77 +110,77 @@ export class ModelService {
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.post(this.webUrl+'/complete-order',params, {headers: headers,withCredentials:true});
+		return this._http.post(this.apiUrl+'/complete-order',params, {headers: headers});
   }
 
 
-  modelsWorkerSatisfyOrder(workerId:number):Observable<any>{
+  modelsWorkerSatisfyOrder(workerId:number, token: string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/models-worker-satisfy-order/' + workerId , {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/models-worker-satisfy-order/' + workerId , {headers: headers});
   }
 
-  ordersByWorker(workerId:number):Observable<any>{
+  ordersByWorker(workerId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/orders-by-worker/' + workerId , {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/orders-by-worker/' + workerId , {headers: headers});
   }
 
-  ordersByModelWorker(modelBootWorkerId:number):Observable<any>{
+  ordersByModelWorker(modelBootWorkerId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/orders-by-model-boot-worker/' + modelBootWorkerId , {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/orders-by-model-boot-worker/' + modelBootWorkerId , {headers: headers});
   }
 
-  modelsBootByWorker(workerId:number):Observable<any>{
+  modelsBootByWorker(workerId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/models-boot-satisfy-worker/' + workerId , {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/models-boot-satisfy-worker/' + workerId , {headers: headers});
   }
 
-  sizeWorkerByWorker(workerId:number):Observable<any>{
+  sizeWorkerByWorker(workerId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/size-worker-satisfy-worker/' + workerId , {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/size-worker-satisfy-worker/' + workerId , {headers: headers});
   }
 
-  sizeWorkerByWorkerModel(workerId:number, modelBootId:number):Observable<any>{
+  sizeWorkerByWorkerModel(workerId:number, modelBootId:number, token:string):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this._userService.getXsrfToken())
+      'Authorization', ' Bearer ' + token
     );
 
-		return this._http.get(this.webUrl+'/size-worker-satisfy-worker-model/' + workerId + '/' + modelBootId , {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/size-worker-satisfy-worker-model/' + workerId + '/' + modelBootId , {headers: headers});
   }
   
 }

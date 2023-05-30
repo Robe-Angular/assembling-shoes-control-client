@@ -5,6 +5,7 @@ import { WorkerService } from 'src/app/services/worker.service';
 import { ModelService } from 'src/app/services/model.service';
 import { MakeOrderSizesComponent } from '../make-order-sizes/make-order-sizes.component';
 import { CompleteOrderModelsComponent } from '../complete-order-models/complete-order-models.component';
+import { UserService } from 'src/app/services/user.service';
 
 interface DialogDataMakeOrder{
   workerId: number;
@@ -23,8 +24,10 @@ export class MakeOrderComponent implements OnInit {
   public modelList: Array<any>
   public workerName: string;
   public modelsSelected:Array<any>;
+  public token:string;
 
   constructor(
+    private _userService: UserService,
     private _dialogRef: MatDialogRef<MakeOrderComponent>,
     private _modelService: ModelService,
     private _workerService: WorkerService,
@@ -36,7 +39,7 @@ export class MakeOrderComponent implements OnInit {
     this.modelList = [];
     this.workerName = "";
     this.modelsSelected = [];
-    
+    this.token = this._userService.getJwtToken();
   }
 
   ngOnInit(): void {
@@ -52,7 +55,7 @@ export class MakeOrderComponent implements OnInit {
   }
 
   getWorkerInfo(workerId:number){
-    this._workerService.getWorkerInfo(workerId).subscribe(
+    this._workerService.getWorkerInfo(workerId, this.token).subscribe(
       response => {
         this.workerName = response.worker.name
       },error => {
@@ -64,7 +67,7 @@ export class MakeOrderComponent implements OnInit {
   
 
   getWorkerList(){
-    this._workerService.workerList().subscribe(
+    this._workerService.workerList(this.token).subscribe(
       response => {
         this.workerList = response.workers;
       },error => {
@@ -74,7 +77,7 @@ export class MakeOrderComponent implements OnInit {
   }
 
   getModelList(){
-    this._modelService.modelList().subscribe(
+    this._modelService.modelList(this.token).subscribe(
       response => {
         this.modelList = response.models;
       },error => {

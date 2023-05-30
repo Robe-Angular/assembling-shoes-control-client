@@ -13,6 +13,7 @@ import { AdminService } from 'src/app/services/admin.service';
 })
 export class LoginComponent implements OnInit {
   public userLogin:UserLogin;
+  public token: string;
 
   constructor(
     private _userService: UserService,
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
       email: "",
       password: ""
     };
+    this.token = "";
   }
 
   ngOnInit(): void {
@@ -32,47 +34,39 @@ export class LoginComponent implements OnInit {
   
 
   submitUserLogin(){
-    
-    this._userService.xsrfSanctum().subscribe(
-      responseSanctum => {
-        this._userService.login(this.userLogin).subscribe(
 
-          responseLogin => {
-            if(responseLogin.user_role == 'user'){
+      this._userService.login(this.userLogin).subscribe(
 
-              this._userService.getUser().subscribe(
-                responseGetUser => {
-                  this._userService.updateIdentity(responseGetUser.manager,'user');
-                  this._router.navigate(['/user-panel']);
+        responseLogin => {
+          this.token = responseLogin.token;
+          localStorage.setItem('token',responseLogin.token);
+          if(responseLogin.user_role == 'user'){
 
-                },error => {
-                  console.log(error);
-                }
+            this._userService.getUser(responseLogin.token).subscribe(
+              responseGetUser => {
+                this._userService.updateIdentity(responseGetUser.manager,'user');
+                this._router.navigate(['/user-panel']);
 
-              );
-             }else{ 
-              this._adminService.getAdmin().subscribe(
-                responseGetAdmin => {
-                  this._userService.updateIdentity(responseGetAdmin.manager,'admin');
-                  this._router.navigate(['/admin-panel']);
-                },error => {
-                  console.log(error);
-                }
-              );
-            }
-                        
-          },
-          error => {
-            console.log(error);
+              },error => {
+                console.log(error);
+              }
+
+            );
+            }else{ 
+            this._adminService.getAdmin(responseLogin.token).subscribe(
+              responseGetAdmin => {
+                this._userService.updateIdentity(responseGetAdmin.manager,'admin');
+                this._router.navigate(['/admin-panel']);
+              },error => {
+                console.log(error);
+              }
+            );
           }
-        );
-        
-      },error => {
-        console.log(error);
-      }
-    );
-    
-
-    
+                      
+        },
+        error => {
+          console.log(error);
+        }
+      );   
   }
 }

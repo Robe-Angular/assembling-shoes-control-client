@@ -17,14 +17,14 @@ import { Router } from '@angular/router';
 
 export class UserService {
 
-  public webUrl:string;
+  public apiUrl:string;
 
   constructor(
     private _http:HttpClient,
     private _router:Router
     
   ) { 
-    this.webUrl = GLOBAL.webUrl;
+    this.apiUrl = GLOBAL.apiUrl;
   }
 
   
@@ -32,10 +32,12 @@ export class UserService {
   xsrfSanctum(){
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
     
-		return this._http.get(this.webUrl+'/sanctum/csrf-cookie',{headers:headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/sanctum/csrf-cookie',{headers:headers,withCredentials:true});
   }
 
-  
+  getJwtToken():string{
+    return localStorage.getItem('token') || "";
+  }
   
   getXsrfToken():string {
     try{
@@ -61,7 +63,7 @@ export class UserService {
       'X-XSRF-TOKEN', decodeURIComponent(this.getXsrfToken())
     );
 
-		return this._http.post(this.webUrl+'/login', params, {headers: headers,withCredentials:true});
+		return this._http.post(this.apiUrl+'/login', params, {headers: headers});
 
   }
 
@@ -72,47 +74,52 @@ export class UserService {
 		const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
-    }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this.getXsrfToken())
-    );
+    })
 
-		return this._http.post(this.webUrl+'/register', params, {headers: headers,withCredentials:true});
+		return this._http.post(this.apiUrl+'/register', params, {headers: headers});
   }
 
-  logout():Observable<any>{
+  logout(token:string):Observable<any>{
     
 		const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
 
     }).set(
-      'X-XSRF-TOKEN', decodeURIComponent(this.getXsrfToken()) 
+      'Authorization', ' Bearer ' + token
     );
-		return this._http.get(this.webUrl+'/logout',  {headers: headers,withCredentials:true});
+    
+    
+		return this._http.get(this.apiUrl+'/logout',  {headers: headers});
   }
 
-  getUser():Observable<any>{
+  getUser(token:string):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     .set(
-      'X-XSRF-TOKEN', decodeURIComponent(this.getXsrfToken())
+      'Authorization', ' Bearer ' + token
 
     );
-		return this._http.get(this.webUrl+'/user',  {headers: headers,withCredentials:true});
+		return this._http.get(this.apiUrl+'/user',  {headers: headers});
   }
 
   updateIdentity(data:any, managerRole:string){
-    let identity: UserIdentity;
-    identity = {
-      name: data.name,
-      email: data.email,
-      role: managerRole
-    };
-    console.log(data);
-    localStorage.setItem('identity',JSON.stringify(data));
+    try{
+      let identity: UserIdentity;
+      identity = {
+        name: data.name,
+        email: data.email,
+        role: managerRole
+      };
+      console.log(data);
+      localStorage.setItem('identity',JSON.stringify(identity));
+    }catch(error){
+      console.log(error)
+    }
+    
   }
 
   getIdentity(){
-    let cookie = this.getXsrfToken();
-    if(cookie == 'false'){
+    let token = this.getJwtToken();
+    if(!token){
       let identity = {
         name: "",
         email: "",
@@ -124,20 +131,22 @@ export class UserService {
     return JSON.parse(localStorage.getItem('identity') || "{}");
   }
 
-  verify():Observable<boolean>{
+  verify(token:string):Observable<boolean>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     .set(
-      'X-XSRF-TOKEN', decodeURIComponent(this.getXsrfToken())
+      'Authorization', ' Bearer ' + token
 
     );
-		return this._http.get(this.webUrl+'/verified',  {headers: headers,withCredentials:true}).pipe(
+		return this._http.get(this.apiUrl+'/verified',  {headers: headers}).pipe(
       map( manager=> {
         const hasCredentials = !!manager.hasOwnProperty('manager');
-        console.log(manager);
+        
         return hasCredentials;
       } ),
       catchError((err, caught) => {
-        return this.notPassed('/login');
+        console.log(err); 
+        localStorage.clear();
+        return of(false);
       })
     );
   } 
@@ -146,6 +155,14 @@ export class UserService {
     this._router.navigate([route]);
     return of(false);
   }
-
-
+  /*
+  testing(token:string){
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+      .set(
+        'Authorization', ' Bearer ' + token
+        
+    );
+		return this._http.get(this.apiUrl+'/admin',  {headers: headers});
+  }
+*/
 }

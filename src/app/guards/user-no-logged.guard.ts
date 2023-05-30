@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ import { Router } from '@angular/router';
 export class UserNoLoggedGuard implements CanActivate {
 
   constructor(
-    private _router:Router
+    private _router:Router,
+    private _userService: UserService
   ){
 
   }
@@ -19,14 +21,13 @@ export class UserNoLoggedGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     let identity = localStorage.getItem('identity');
-    console.log(identity);
-    if(identity != undefined){
-      this._router.navigate(['/admin-panel']);
-      return false;
-    }else{
+    
+    let token:string = this._userService.getJwtToken();
+    console.log(token);
+    if(token == ""){
+      
       return true;
     }
-    
+    return false;
   }
-  
 }

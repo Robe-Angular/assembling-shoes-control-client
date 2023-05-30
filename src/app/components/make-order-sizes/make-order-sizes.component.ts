@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModelService } from 'src/app/services/model.service';
 import { MakeOrderQuantityComponent } from '../make-order-quantity/make-order-quantity.component';
+import { UserService } from 'src/app/services/user.service';
 
 export interface SizeItem{
   modelId: number;
@@ -18,7 +19,7 @@ export interface SizeItem{
   styleUrls: ['./make-order-sizes.component.scss']
 })
 export class MakeOrderSizesComponent implements OnInit {
-
+  public token:string;
   public lastIndex: number;
   public currentSizes: Array<any>;
   public currentIndex: number;
@@ -30,7 +31,9 @@ export class MakeOrderSizesComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _model_boot_service: ModelService,
     private _dialog: MatDialog,
-    private _dialogRef: MatDialogRef<MakeOrderSizesComponent>
+    private _dialogRef: MatDialogRef<MakeOrderSizesComponent>,
+    private _userService: UserService
+
   ) { 
     this.lastIndex = data.modelsSelected.length - 1;
     this.currentIndex = 0;
@@ -38,6 +41,7 @@ export class MakeOrderSizesComponent implements OnInit {
     this.currentIndexModelId = 0;
     this.modelsSelected = data.modelsSelected;
     this.sizesSelected = [];
+    this.token = this._userService.getJwtToken();
   }
 
   ngOnInit(): void {
@@ -66,7 +70,7 @@ export class MakeOrderSizesComponent implements OnInit {
   }
 
   getSizesFromModel(modelId:number){
-    this._model_boot_service.getSizes(modelId).subscribe(
+    this._model_boot_service.getSizes(modelId, this.token).subscribe(
       response => {
         this.currentSizes = response.sizes.sort((a:any,b:any) => {
           return a.number - b.number;

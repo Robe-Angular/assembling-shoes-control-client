@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'; 
 import { ModelService } from 'src/app/services/model.service';
+import { UserService } from 'src/app/services/user.service';
 import { WorkerService } from 'src/app/services/worker.service';
 
 @Component({
@@ -17,12 +18,13 @@ export class WorkerDetailComponent implements OnInit {
   public modelsWithSizeWorker: Array<any>;
   public modelsSelectedForSizeWorker: Array<any>;
   public workerName: string;
-  
+  public token: string;
 
   constructor(
     private _route: ActivatedRoute,
     private _modelService: ModelService,
-    private _workerService: WorkerService
+    private _workerService: WorkerService,
+    private _userService: UserService
   ) { 
     this.modelsWithOrders = [];
     this.workerId = 0;
@@ -31,18 +33,19 @@ export class WorkerDetailComponent implements OnInit {
     this.modelsWithSizeWorker = [];
     this.modelsSelectedForSizeWorker = [];
     this.workerName = "";
+    this.token = this._userService.getJwtToken();
   }
 
   ngOnInit(): void {
     this._route.params.subscribe(params => {
       this.workerId = params['workerId'];
-      this._modelService.modelsWorkerSatisfyOrder(this.workerId).subscribe(
+      this._modelService.modelsWorkerSatisfyOrder(this.workerId, this.token).subscribe(
         response => {
           this.modelsWithOrders = response.models_boot_satisfy;
-          this._modelService.modelsBootByWorker(this.workerId).subscribe(
+          this._modelService.modelsBootByWorker(this.workerId, this.token).subscribe(
             response => {
               this.modelsWithSizeWorker = response.models_boot_satisfy;
-              this._workerService.getWorkerInfo(this.workerId).subscribe(
+              this._workerService.getWorkerInfo(this.workerId, this.token).subscribe(
                 response => {
                   this.workerName = response.worker.name;
                 }, error => {
@@ -61,7 +64,7 @@ export class WorkerDetailComponent implements OnInit {
     });
   }
   getAllOrders(){
-    this._modelService.ordersByWorker(this.workerId).subscribe(
+    this._modelService.ordersByWorker(this.workerId, this.token).subscribe(
       response => {
         this.orders = response.orders_by_worker;
         this.modelsWithOrders.forEach(
@@ -86,7 +89,7 @@ export class WorkerDetailComponent implements OnInit {
   }
 
   concatOrders(modelBootWorkerId:number){
-    this._modelService.ordersByModelWorker(modelBootWorkerId).subscribe(
+    this._modelService.ordersByModelWorker(modelBootWorkerId, this.token).subscribe(
       response => {
         this.modelsSelectedForOrders.push(modelBootWorkerId);
         this.orders = this.orders.concat(response.orders_by_model_boot_worker);
@@ -127,7 +130,7 @@ export class WorkerDetailComponent implements OnInit {
   }
 
   getAllSizeWorker(){
-    this._modelService.sizeWorkerByWorker(this.workerId).subscribe(
+    this._modelService.sizeWorkerByWorker(this.workerId, this.token).subscribe(
       response => {
         this.modelsSelectedForSizeWorker = response.models_with_size_worker;
         this.sortAllSizeWorkerSizes();
@@ -139,7 +142,7 @@ export class WorkerDetailComponent implements OnInit {
   }
 
   concatSizeWorker(modelBootId:number){
-    this._modelService.sizeWorkerByWorkerModel(this.workerId,modelBootId).subscribe(
+    this._modelService.sizeWorkerByWorkerModel(this.workerId,modelBootId, this.token).subscribe(
       response => {
         let modelWithSizeWorker = response.model_with_size_worker;
         modelWithSizeWorker.sizes.sort((a:any,b:any) => {

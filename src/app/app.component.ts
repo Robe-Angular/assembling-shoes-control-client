@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements DoCheck{
-  public identity: UserIdentity
+  public identity: UserIdentity;
+  public token:string;
   constructor(
     private _userService: UserService,
     private _router:Router
@@ -19,11 +20,14 @@ export class AppComponent implements DoCheck{
       email: "",
       role: ""
     };
+    this.token = this._userService.getJwtToken();
+
   }
   title = 'assembling-shoes-control-client';
 
   ngDoCheck(){
     this.identity = this._userService.getIdentity();
+    this.token = this._userService.getJwtToken();
   }
 
   isAdmin(){
@@ -35,11 +39,14 @@ export class AppComponent implements DoCheck{
   }
 
   logout(){
-    this._userService.logout().subscribe(
+    this._userService.logout(this.token).subscribe(
       response => {
-        localStorage.removeItem('identity');
-        this.identity = this._userService.getIdentity();
-        this._router.navigate(['/login']);
+        if(response){
+          localStorage.clear();
+          this.identity = this._userService.getIdentity();
+          this._router.navigate(['/login']);
+        }
+        
       }, error => {
         console.log(error);
       }
@@ -47,7 +54,7 @@ export class AppComponent implements DoCheck{
   }
 
   verify(){
-    this._userService.verify().subscribe(
+    this._userService.verify(this.token).subscribe(
       response =>{
         
       },error => {
@@ -56,5 +63,11 @@ export class AppComponent implements DoCheck{
       
     );
   }
-  
+  /*
+  testing(){
+    this._userService.testing(this.token).subscribe(
+      
+    );
+  }
+  */
 }

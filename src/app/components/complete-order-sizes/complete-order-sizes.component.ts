@@ -6,6 +6,8 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dial
 import { SizeItem } from '../make-order-sizes/make-order-sizes.component';
 import { CompleteOrderQuantityComponent } from '../complete-order-quantity/complete-order-quantity.component';
 import { ViewChild } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+
 
 export interface SizeItemwithCurrentQuantity extends SizeItem{
   currentQuantity:number;
@@ -24,13 +26,15 @@ export class CompleteOrderSizesComponent implements OnInit {
   public currentSizes:Array<any>;
   public sizesSelected: Array<SizeItemwithCurrentQuantity>;
   public lastIndex:number;
-  
+  public token: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data:any,
     private _dialogRef: MatDialogRef<CompleteOrderSizesComponent>,
     private _dialog: MatDialog,
-    private _modelService: ModelService
+    private _modelService: ModelService,
+    private _userService: UserService
+
   ) { 
     this.workerId = this.data.dialogInfo.dialogInfo.workerId;
     this.modelsSelected = this.data.modelsSelected;
@@ -38,6 +42,7 @@ export class CompleteOrderSizesComponent implements OnInit {
     this.lastIndex = this.modelsSelected.length - 1;
     this.sizesSelected = [];
     this.currentSizes = [];
+    this.token = this._userService.getJwtToken();
   }
 
   ngOnInit(): void {
@@ -48,7 +53,7 @@ export class CompleteOrderSizesComponent implements OnInit {
 
   getSizesWorkerFromModel(){
     let modelId = this.modelsSelected[this.currentIndex].id
-    this._modelService.sizeWorkerSatisfy(modelId, this.workerId).subscribe( 
+    this._modelService.sizeWorkerSatisfy(modelId, this.workerId, this.token).subscribe( 
       response =>{
 
         this.currentSizes = response.sizes_worker_satisfy.sort((a:any,b:any) => {

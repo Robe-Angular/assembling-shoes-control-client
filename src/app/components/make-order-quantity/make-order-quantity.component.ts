@@ -2,7 +2,7 @@ import { Component, OnInit, Inject,ViewChild,ElementRef, DoCheck } from '@angula
 import { MatDialogRef, MAT_DIALOG_DATA  } from '@angular/material/dialog';
 import { SizeItem } from '../make-order-sizes/make-order-sizes.component'; 
 import { ModelService } from 'src/app/services/model.service';
-
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -20,6 +20,7 @@ export class MakeOrderQuantityComponent implements OnInit,DoCheck {
   public orderInfo: any;
   private _lastCurrentIndex: number;
   private _secondLastCurrentIndex:number;
+  public token:string;
 
   @ViewChild('inputQuantity') inputQuantity!: ElementRef;
   @ViewChild ('dialogTitle') dialogTitle!: ElementRef;
@@ -27,7 +28,7 @@ export class MakeOrderQuantityComponent implements OnInit,DoCheck {
   constructor(
     private _dialogRef: MatDialogRef<MakeOrderQuantityComponent>,
     private _modelService: ModelService,
-    
+    private _userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data:any
   ) { 
     this.sizeItems = this.data.sizesSelected;
@@ -36,7 +37,7 @@ export class MakeOrderQuantityComponent implements OnInit,DoCheck {
     this.orderInfo = this.data.dialogInfo;
     this._lastCurrentIndex = 0;
     this._secondLastCurrentIndex = 0;
-    
+    this.token = this._userService.getJwtToken();
   }
 
   ngDoCheck(): void {
@@ -88,7 +89,7 @@ export class MakeOrderQuantityComponent implements OnInit,DoCheck {
   
 
   submitArray(){
-    this._modelService.makeOrder(this.sizeItems,this.orderInfo.workerId).subscribe(
+    this._modelService.makeOrder(this.sizeItems,this.orderInfo.workerId, this.token).subscribe(
       response => {
         this._dialogRef.close();
       },error => {

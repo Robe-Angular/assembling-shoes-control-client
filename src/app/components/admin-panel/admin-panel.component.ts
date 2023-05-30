@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/services/admin.service';
 import { Admin } from 'src/app/interfaces/admin';
 import { User } from 'src/app/interfaces/user';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -13,9 +14,11 @@ export class AdminPanelComponent implements OnInit {
   
   public admin:Admin;
   public usersNotVerified:Array<User>;
+  public token:string;
 
   constructor(
-    private _adminService: AdminService
+    private _adminService: AdminService,
+    private _userService: UserService
   ) { 
     this.admin = {
       name:"",
@@ -23,13 +26,14 @@ export class AdminPanelComponent implements OnInit {
       allow_register: 0
     },
     this.usersNotVerified = [];
+    this.token = this._userService.getJwtToken();
   }
 
   updateAdmin(){
-    this._adminService.getAdmin().subscribe(
+    this._adminService.getAdmin(this.token).subscribe(
       response => {
         this.admin = response.manager;
-        this._adminService.getUsersNotVerified().subscribe(
+        this._adminService.getUsersNotVerified(this.token).subscribe(
           response => {
             this.usersNotVerified = response.users_not_verified;
             console.log(response);
@@ -49,8 +53,8 @@ export class AdminPanelComponent implements OnInit {
     this.updateAdmin();
   }
 
-  allowRegister(allowRegister:boolean){
-    this._adminService.allow_register(allowRegister).subscribe(
+  allowRegister(allowRegister:boolean ){
+    this._adminService.allow_register(allowRegister, this.token).subscribe(
       response => {
         this.updateAdmin();
       },error => {
@@ -60,7 +64,7 @@ export class AdminPanelComponent implements OnInit {
   }
 
   accept(userId:number){
-    this._adminService.accept(userId).subscribe(
+    this._adminService.accept(userId, this.token).subscribe(
       response => {
         this.updateAdmin();
         console.log(response);
@@ -71,7 +75,7 @@ export class AdminPanelComponent implements OnInit {
   }
 
   deny(userId:number){
-    this._adminService.deny(userId).subscribe(
+    this._adminService.deny(userId, this.token).subscribe(
       response => {
         this.updateAdmin();
         console.log(response);

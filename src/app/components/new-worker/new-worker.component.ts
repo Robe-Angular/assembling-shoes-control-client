@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { UserService } from 'src/app/services/user.service';
 import { WorkerService } from 'src/app/services/worker.service';
+
 
 @Component({
   selector: 'app-new-worker',
@@ -10,12 +12,15 @@ import { WorkerService } from 'src/app/services/worker.service';
 export class NewWorkerComponent implements OnInit {
 
   public workerName:string;
+  public token:string;
 
   constructor(
     private _dialogRef: MatDialogRef <NewWorkerComponent>,
-    private _workerService: WorkerService
+    private _workerService: WorkerService,
+    private _userService: UserService
   ) { 
     this.workerName = "";
+    this.token = this._userService.getJwtToken();
   }
 
   ngOnInit(): void {
@@ -26,7 +31,7 @@ export class NewWorkerComponent implements OnInit {
   }
 
   submit(){
-    this._workerService.createWorker(this.workerName).subscribe(
+    this._workerService.createWorker(this.workerName, this.token).subscribe(
       response => {
         this._dialogRef.close();
       },error => {

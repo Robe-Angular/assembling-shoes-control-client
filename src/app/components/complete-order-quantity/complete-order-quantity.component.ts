@@ -2,6 +2,7 @@ import { Component, OnInit,Inject,ViewChild,ElementRef,DoCheck } from '@angular/
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ModelService } from 'src/app/services/model.service';
 import { SizeItemwithCurrentQuantity } from '../complete-order-sizes/complete-order-sizes.component';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -17,11 +18,12 @@ export class CompleteOrderQuantityComponent implements OnInit {
   public currentIndex: number;
   private _lastCurrentIndex: number;
   private _secondLastCurrentIndex: number;
-
+  public token:string;
   constructor(
     private _dialog: MatDialog,
     private _dialogRef: MatDialogRef<CompleteOrderQuantityComponent>,
     private _modelService: ModelService,
+    private _userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data:any
   ) { 
     this.sizesSelected = data.sizesSelected;
@@ -29,6 +31,7 @@ export class CompleteOrderQuantityComponent implements OnInit {
     this.currentIndex = 0;
     this._lastCurrentIndex = 0;
     this._secondLastCurrentIndex = 0;
+    this.token = this._userService.getJwtToken();
   }
 
   ngOnInit(): void {
@@ -78,7 +81,7 @@ export class CompleteOrderQuantityComponent implements OnInit {
   }
 
   submitSizes(){
-    this._modelService.completeOrder(this.sizesSelected).subscribe(
+    this._modelService.completeOrder(this.sizesSelected, this.token).subscribe(
       response => {
         this._dialogRef.close();
       },error => {

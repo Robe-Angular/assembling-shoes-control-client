@@ -28,20 +28,15 @@ export class RegisterComponent implements OnInit {
   }
 
   submitUserRegister(){
-    
-    this._userService.xsrfSanctum().subscribe(
-      responseSanctum => {
-        this._userService.register(this.userRegister).subscribe(
-          responseRegister => {
-            console.log(responseRegister);
-          },error => {
-            console.log(error);
-          }
-        );
-      },errorSanctum => {
-        console.log(errorSanctum)
+    this._userService.register(this.userRegister).subscribe(
+      responseRegister => {
+        console.log(responseRegister);
+      },error => {
+        console.log(error);
       }
     );
+  
+  
 
     
   }
